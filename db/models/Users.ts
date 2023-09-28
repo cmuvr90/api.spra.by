@@ -1,44 +1,26 @@
-import mongoose, {Schema, Document, Model} from 'mongoose';
+import {Schema, model} from 'mongoose';
+import {IUser, IUserMethods, IUserModel, USER_ROLE} from "@/db/models/types/IUsers";
 
-interface IUser extends Document {
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null;
-  role: ROLE;
-  activationLink: string | null
-  password: string
-}
-
-interface IUserModel extends Model<IUser> {
-  getAll(): Promise<IUser[] | null>;
-}
-
-export enum ROLE {
-  ADMIN = 'admin',
-  MANAGER = 'manager',
-  CUSTOMER = 'customer'
-}
-
-const UsersSchema = new Schema<IUser>({
+const schema = new Schema<IUser, IUserModel, IUserMethods>({
   firstName: {type: String, default: null},
   lastName: {type: String, default: null},
   email: {type: String, default: null},
   role: {
     type: String,
-    enum: Object.values(ROLE),
-    default: ROLE.MANAGER,
+    enum: Object.values(USER_ROLE),
+    default: USER_ROLE.MANAGER,
   },
   activationLink: {type: String, default: null},
   password: {type: String, required: true},
 });
 
+schema.static('createWithFullName', function createWithFullName(name: string) {
+  const [firstName, lastName] = name.split(' ');
+  return this.create({firstName, lastName});
+});
 
-UsersSchema.static('getAll', function () {
-  return this.find()
-})
+schema.method('fullName', function fullName(): string {
+  return this.firstName + ' ' + this.lastName;
+});
 
-UsersSchema.methods.test = function () {
-
-}
-
-export default mongoose?.models?.Users as IUserModel || mongoose.model<IUserModel>('Users', UsersSchema);
+export default model<IUser, IUserModel>('Users', schema);
