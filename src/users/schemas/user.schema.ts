@@ -1,18 +1,36 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, ObjectId } from 'mongoose';
+import { Transform } from 'class-transformer';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({
+  toJSON: {
+    getters: true,
+    virtuals: true,
+  },
+})
 export class User {
+  @Transform(({ value }) => value.toString())
+  id: ObjectId;
+
   @Prop()
   firstName: string;
 
   @Prop()
   lastName: string;
 
-  @Prop()
+  @Prop({ unique: true })
   email: string;
+
+  @Prop()
+  password: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.virtual('fullName').get(function (this: UserDocument) {
+  return `${this.firstName} ${this.lastName}`;
+});
+
+export { UserSchema };
