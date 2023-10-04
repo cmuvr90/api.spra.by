@@ -1,18 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { IdValidationPipe } from '../pipes/validations.pipe';
+import { User } from './schemas/user.schema';
+import MongooseClassSerializerInterceptor from '../../utils/mongooseClassSerializer.interceptor';
 
 @Controller('api/v1/users')
 @ApiTags('Users')
+@UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class UsersV1Controller {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
 
   @Get()
   findAll() {
@@ -20,17 +17,10 @@ export class UsersV1Controller {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  async findOne(@Param('id', IdValidationPipe) id: string) {
+    const user = await this.usersService.findOne(id);
+    if (!user) throw new NotFoundException();
+    console.log('USER', user);
+    return user;
   }
 }

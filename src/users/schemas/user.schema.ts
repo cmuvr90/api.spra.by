@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, ObjectId } from 'mongoose';
-import { Transform } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -8,6 +8,11 @@ export type UserDocument = HydratedDocument<User>;
   toJSON: {
     getters: true,
     virtuals: true,
+    transform: function (doc, ret) {
+      delete ret._id;
+      delete ret.__v;
+      delete ret.password;
+    },
   },
 })
 export class User {
@@ -24,13 +29,14 @@ export class User {
   email: string;
 
   @Prop()
+  @Exclude()
   password: string;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.virtual('fullName').get(function (this: UserDocument) {
-  return `${this.firstName} ${this.lastName}`;
-});
+// UserSchema.virtual('fullName').get(function (this: UserDocument) {
+//   return `${this.firstName} ${this.lastName}`;
+// });
 
 export { UserSchema };

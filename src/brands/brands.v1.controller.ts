@@ -1,12 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
 import { BrandsService } from './brands.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 import { ApiTags } from '@nestjs/swagger';
+import MongooseClassSerializerInterceptor from '../../utils/mongooseClassSerializer.interceptor';
+import { Brand } from './schemas/brand.schema';
 
-@Controller('brands')
+@Controller('api/v1/brands')
 @ApiTags('Brands')
-export class BrandsController {
+@UseInterceptors(MongooseClassSerializerInterceptor(Brand))
+export class BrandsV1Controller {
   constructor(private readonly brandsService: BrandsService) {}
 
   @Post()

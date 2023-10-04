@@ -17,7 +17,7 @@ export class UsersService {
     return this.UserModel.find();
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return this.UserModel.findById(id);
   }
 

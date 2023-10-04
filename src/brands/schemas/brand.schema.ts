@@ -4,7 +4,16 @@ import { User } from '../../users/schemas/user.schema';
 
 export type BrandDocument = HydratedDocument<Brand>;
 
-@Schema()
+@Schema({
+  toJSON: {
+    getters: true,
+    virtuals: true,
+    transform: function (doc, ret) {
+      delete ret._id;
+      delete ret.__v;
+    },
+  },
+})
 export class Brand {
   @Prop(String)
   name: string;
