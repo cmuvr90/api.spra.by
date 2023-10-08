@@ -4,9 +4,17 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
+import { I18nValidationPipe } from 'nestjs-i18n';
+import { I18nValidationExceptionFilter } from 'nestjs-i18n';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new I18nValidationPipe(), new ValidationPipe());
+  app.useGlobalFilters(
+    new I18nValidationExceptionFilter({
+      detailedErrors: false,
+    }),
+  );
   // app.setGlobalPrefix('api/v1');
 
   const adminApiConfig = new DocumentBuilder()

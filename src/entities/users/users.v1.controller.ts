@@ -1,9 +1,9 @@
 import { Controller, Get, NotFoundException, Param, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiTags } from '@nestjs/swagger';
-import { IdValidationPipe } from '../pipes/validations.pipe';
+import { IdValidationPipe } from '../../pipes/validations.pipe';
 import { User } from './schemas/user.schema';
-import MongooseClassSerializerInterceptor from '../../utils/mongooseClassSerializer.interceptor';
+import MongooseClassSerializerInterceptor from '../../../utils/mongooseClassSerializer.interceptor';
 
 @Controller('api/v1/users')
 @ApiTags('Users')

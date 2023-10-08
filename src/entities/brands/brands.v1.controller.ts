@@ -3,7 +3,7 @@ import { BrandsService } from './brands.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 import { ApiTags } from '@nestjs/swagger';
-import MongooseClassSerializerInterceptor from '../../utils/mongooseClassSerializer.interceptor';
+import MongooseClassSerializerInterceptor from '../../../utils/mongooseClassSerializer.interceptor';
 import { Brand } from './schemas/brand.schema';
 
 @Controller('api/v1/brands')

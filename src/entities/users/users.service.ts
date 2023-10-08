@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
+import { INVALID_LOGIN_OR_PASSWORD } from '../../auth/auth.constants';
+// import { compare } from 'bcryptjs';
+// import { AuthService } from '../../auth/auth.service';
 
 @Injectable()
 export class UsersService {
@@ -27,5 +30,18 @@ export class UsersService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  /**
+   *
+   * @param email
+   * @param password
+   */
+  async isValid(email: string, password: string) {
+    const user = await this.UserModel.findOne({ email });
+    if (!user) throw new UnauthorizedException(INVALID_LOGIN_OR_PASSWORD);
+    // const isValidPassword = await Auth.
+    // if (!isValidPassword) throw new UnauthorizedException(INVALID_LOGIN_OR_PASSWORD);
+    return user;
   }
 }
