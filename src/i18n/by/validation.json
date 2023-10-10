@@ -1,0 +1,9 @@
+{
+  "email": "емэйл",
+  "password": "пароль",
+  "firstName": "iмя",
+  "IS_STRING": "$t(validation.{property}) павінен быць строчкай",
+  "IS_NOT_EMPTY": "$t(validation.{property}) не павінна быць путой",
+  "IS_EMAIL": "$t(validation.{property}) павінен быць правільны",
+  "MIN_LENGTH": "$t(validation.{property}) павінна складацца як мінімум з {constraints.0} сімвалаў"
+}

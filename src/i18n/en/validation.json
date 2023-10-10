@@ -1,9 +1,9 @@
 {
   "email": "email",
   "password": "password",
-  "NOT_EMPTY": "$t(validation.{property}) cannot be empty!!!!!",
-  "INVALID_EMAIL": "email is invalid",
-  "INVALID_BOOLEAN": "{property} is not a boolean",
-  "MIN": "{property} with value: \"{value}\" needs to be at least {constraints.0}, ow and {message}",
-  "MAX": "{property} with value: \"{value}\" needs to be less than {constraints.0}, ow and {message}"
+  "firstName": "first name",
+  "IS_STRING": "$t(validation.{property}) password should be string",
+  "IS_NOT_EMPTY": "$t(validation.{property}) should not be empty",
+  "IS_EMAIL": "$t(validation.{property}) is invalid",
+  "MIN_LENGTH": "$t(validation.{property}) must not be less than {constraints} symbols"
 }

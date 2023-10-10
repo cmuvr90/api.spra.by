@@ -4,7 +4,13 @@ import { Transform } from 'class-transformer';
 
 export type UserDocument = HydratedDocument<User>;
 
+const enum ROLE {
+  ADMIN = 'admin',
+  MANAGER = 'manager',
+}
+
 @Schema({
+  timestamps: true,
   toJSON: {
     getters: true,
     virtuals: true,
@@ -19,17 +25,23 @@ export class User {
   @Transform(({ value }) => value.toString())
   id: ObjectId;
 
-  @Prop()
+  @Prop({ required: true })
   firstName: string;
 
-  @Prop()
+  @Prop({ default: null })
   lastName: string;
 
-  @Prop({ unique: true })
+  @Prop({ unique: true, required: true })
   email: string;
 
   @Prop()
   password: string;
+
+  @Prop({ default: ROLE.MANAGER })
+  role: ROLE;
+
+  @Prop({ default: null })
+  activationLink: string;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);

@@ -13,7 +13,7 @@ export class UsersService {
   constructor(@InjectModel(User.name) private readonly UserModel: Model<User>) {}
 
   create(createUserDto: CreateUserDto) {
-    return createUserDto;
+    return this.UserModel.create(createUserDto);
   }
 
   findAll() {
@@ -28,8 +28,8 @@ export class UsersService {
     return updateUserDto;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    return this.UserModel.findByIdAndDelete(id);
   }
 
   /**
